@@ -1,0 +1,78 @@
+.JBMenuMain{
+	position: absolute;
+	display: none;
+	text-indent: 0px;
+	background-color: #f0f0f0;
+	border-right:outset 2px #979797;
+	border-bottom:outset 2px #979797;
+	border-top:outset 2px #adadad;
+	border-left:outset 2px #adadad;
+	color:black;
+	padding: 2px;
+	border-radius: 4px;
+	box-shadow: 8px 8px 5px 0px rgba(50, 50, 50, 0.6);
+}
+.JBMenuItem,.JBMenuItemSub{
+	border-radius: 3px;
+	cursor: pointer;
+	padding: 0px 4px 0px 4px;
+	vertical-align: middle;
+}
+.JBMenuItem>div,.JBMenuItemSub>div {
+	display: table-cell;
+	height: 22px;
+	padding: 1px 3px 1px 3px;
+	vertical-align: middle;	
+	text-shadow: 3px 3px 2px rgba(150, 150, 150, 1);
+}
+div.JBMenuItemIco{
+	width: 21px;
+	border-right: 2px groove #e2e3e3;
+	padding: 0px;
+}
+.JBMenuItemIco img{
+	border:none;
+	background: none;
+	width: 20px;
+	margin: 0px;
+	padding: 0px;
+}
+.JBMenuItemTx{
+	padding-left:24px;
+	margin-right: 30px;
+}
+.JBMenuItemSp{
+	width:30px;
+}
+.JBMenuItemSplit{
+	height: 1px;
+	border-bottom: 2px groove silver;
+	margin-bottom: 2px;
+}
+.JBMenuItemSubPoint{
+	background-position: center;
+	background-repeat: no-repeat;
+	width: 4px;
+}
+.JBMenuTitle{
+	padding: 2px;
+	margin-bottom: 1px;
+	background-color: #ff8c00;
+	border: 1px solid #a65c00;
+	text-shadow: 3px 3px 2px rgba(150, 150, 150, 1);
+	background: -moz-linear-gradient(center top , #ffa940, #d27400) repeat scroll 0 0 transparent;
+	background: -webkit-gradient(linear, center top, center bottom, from(#ffa940), to(#d27400)); /* for webkit browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffa940', endColorstr='#d27400'); /* for IE */	
+}
+
+.JBMenuSelItm{
+	padding: 0px 3px 0px 3px;
+	border: 1px solid #ff9797;
+	
+	background: -moz-linear-gradient(center top , #e2e3e3, #ffd0d0) repeat scroll 0 0 transparent;
+	background: -webkit-gradient(linear, center top, center bottom, from(#e2e3e3), to(#ffd0d0)); 
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e2e3e3', endColorstr='#ffd0d0');	
+}
+.JBMenuSelItm>div{
+	height: 20px;
+}
