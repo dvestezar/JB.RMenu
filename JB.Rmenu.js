@@ -1,18 +1,7 @@
 /*
-menu pro right click
+right click menu
 JB (c)2014
 v 1.0.0
-
-	- create	: vytvoøí DOM menu je voláno pøi inicializaci, následná volání nemají efekt
-	- show		: zobrazí vytvoøené menu na daných souøadnicích
-	- showByEvent : jako pøedchozí ale parametr je jen jeden a to event myši, ze kterého si souøadnice veme
-	- add		: pøidá položku do menu
-	- clear		: smaže položky v menu
-	- title		: nastaví titulek menu
-	
-	použití
-	
-	var menu=new JB.Rmenu(parmas) params viz funkce create
 */
 
 if(typeof JB == 'undefined')
@@ -70,18 +59,6 @@ JB.Rmenu = function(params){
 	var ico_arr=JB.Rmenu_default_icons;
 	
 	function create(toto,p){
-		/* je voláno pøi vytváøení objektu !!!!
-		vytvoøí menu a vrátí jej jako element
-		p=parametry
-			.title	= pokud je zadán, tak bude vytvoøen nadpis tabulky
-			.id		= pokud je zadáno tak bude pøiøazeno elementu menu toto ID
-			.icos	= objekt ikon, pokud není zadáno je použito default pole v 'JB.Rmenu.default_icons'
-						{'ico_name1':'ico_url1','ico_name2':'ico_url2',....}
-					pokud je icosadd zadáno tak je toto ignorováno
-			.icosadd= jakopøedchozí ale tento objekt je pøidán k default ikonám a použito, icos je ognorováno
-			
-		vrací odkaz na hlavní DIV elemet menu
-		*/
 		if(created!=false)return null;
 		if(typeof p=='undefined')
 			p={};
@@ -111,26 +88,6 @@ JB.Rmenu = function(params){
 	}
 
 	function make_item(el,fcsN,ico){
-		/* vytvoøí item v menu a pøipojí jej k el
-			el = objekt ve kterém je vytvoøen øádek
-			fcsN = název classname øádku
-			ico = název ikony z objektu ikon
-				pokud nezadáno, null, nebo '' tak není vytvoøena
-		
-			vrací objekt
-			.main = je hlavní div	csn= csN (JBMenuItemSub / JBMenuItem)
-			.ico = je div icony		csn= JBMenuItemIco
-			.tx = span textu		csn= JBMenuItemTx   obálka spanu DI má class JBMenuItemTxDiv
-			.sp = div mezery		csn= JBMenuItemSp
-			.img = pokud je zadána ikona a existuje v poli, tak obsahuje element img v divu ico
-			
-			'div sub' existuje jen pokud se jedná odkaz na podmenu a má csn 'JBMenuItemSubPoint'
-					tento div je pøidán až následnì v rutine add
-			
-			|div main ----------------------------------------|
-			| |div ico--||div tx-------||div sp--||div sub--| |
-			|-------------------------------------------------|
-		*/
 		var o={};
 		o.main=JB.x.cel('div',{ob:el,csN:fcsN});
 		o.ico=JB.x.cel('div',{ob:o.main,csN:'JBMenuItemIco'});
@@ -149,15 +106,9 @@ JB.Rmenu = function(params){
 	}
 	
 	this.showByEvent=function(e){
-		//jen pomocná pro následující funkce
-		//e je event myši
 		this.show(e.pageX,e.pageY);
 	}
 	this.show=function(x,y){
-		/* zobrazí menu
-			x=pozice z leva v pixelech relativnì od levého horního rohu stránky
-			y=pozice z vrchu pixelech relativnì od levého horního rohu stránky
-		*/
 		with(jQuery(v_menu)){
 			css({
 				'left':(x+1)+'px',
@@ -167,36 +118,9 @@ JB.Rmenu = function(params){
 		}
 	}
 	this.hide=function(){
-		//x= int v ms animace skrytí, jako v jQuery
 		jQuery(v_menu).delay(100).hide(200);
 	}
 	this.add = function(p){
-	/* funkce pøidá øádek do menu
-		p = parametry pro všechny typy
-			p.csN = pokud zadáno tak je ke classname DIV elementu JBMenuItem pøidán tento text
-			p.typ = - když nezadáno tak normální øádek odkaz/funkce
-					- když = 'split' tak bude vytvoøen øádek oddìlovaè s classname "JBMenuItemSplit"
-					- když = 'sub' tak bude vytvoøeno submenu s classname "JBMenuItemSub"
-							v tomto øádku je také vytvoøena DIV s class 'JBMenuItemSubPoint' kde je zobrazena šipka na submenu
-			p.width = (integer) pokud není zadáno tak není použito, jinak šíøka menu v px
-					
-			'p' parametry pro default typ
-				p.tx = text øádku
-				p.url = pokud string tak URL, pokud objekt tak funkce a není brán v potaz target 
-				p.target = funkce jako u html linku
-				p.ico = název ikony z pole ikon pøi vytváøení menu
-
-			'p' parametry pro 'sub' typ
-				p.tx = text øádku
-				p.wait = (integer) default 0, 0 okamžité zobrazení submenu, jinak èas zpoždìní zobrazení v ms
-				p.p = parametry pro submenu jako u funkce create
-				p.ico = název ikony z pole ikon pøi vytváøení menu
-				
-			'p' parametry pro 'split' typ
-				nemá parametry
-			
-		vrací odkaz na vytvoøený element
-	*/
 		var tx,url,target,x;
 		var el=jQuery(v_menu);
 		var itm;
@@ -277,19 +201,15 @@ JB.Rmenu = function(params){
 		if(!JB.is.und(itm.main)){
 			itm.main.onmouseover=function(){
 				jQuery(this).addClass('JBMenuSelItm');
-				//jQuery(this).JBMainDiv.show();
 			};
 			itm.main.onmouseout=function(){
 				jQuery(this).removeClass('JBMenuSelItm');
-				//jQuery(this).JBMainDiv.hide(200);
 			};
 		}
 		return itm.main;
 	}
 	
 	this.title=function(tx){
-		//nastaví title menu
-		//pokud je tx null tak skryje title
 		if(JB.is.empty(tx)){
 			jQuery(v_title).hide();
 		}else{
@@ -298,7 +218,6 @@ JB.Rmenu = function(params){
 		}
 	}
 	this.clear=function(){
-		//smaže všechny itemy z menu
 		var i=jQuery(v_menu).children('.JBMenuItemSub');
 		if(i.length>0)
 			for(var a=0;a<i.length;a++){
