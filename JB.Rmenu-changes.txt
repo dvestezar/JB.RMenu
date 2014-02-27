@@ -1,2 +1,6 @@
+v 1.1.0
+	- ADD	: pøidán event onshow a funkce bind
+	- FIX	: fn clear, pøidána chybìjící class JBMenuTitle a opraveno na jQuery
+
 v 1.0.0
 	Born

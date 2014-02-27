@@ -1,7 +1,7 @@
 /*
 right click menu
 JB (c)2014
-v 1.0.0
+v 1.1.0
 */
 
 if(typeof JB == 'undefined')
@@ -57,6 +57,7 @@ JB.Rmenu = function(params){
 	var v_title=null;
 	var created=false;
 	var ico_arr=JB.Rmenu_default_icons;
+	var onshow;
 	
 	function create(toto,p){
 		if(created!=false)return null;
@@ -84,6 +85,9 @@ JB.Rmenu = function(params){
 		}else if(!JB.is.und(p.icos)){
 			ico_arr=p.icos;
 		}
+		if(!JB.is.empty(p.onshow)){
+			onshow=p.onshow;
+		}
 		return v_menu;
 	}
 
@@ -105,10 +109,17 @@ JB.Rmenu = function(params){
 		return o;
 	}
 	
-	this.showByEvent=function(e){
-		this.show(e.pageX,e.pageY);
+	this.showByEvent=function(e,ref){
+		this.show(e.pageX,e.pageY,ref,e);
 	}
-	this.show=function(x,y){
+	this.show=function(x,y,ref,e){
+		if(!JB.is.empty(onshow)){
+			try{
+				onshow(e,v_menu,ref);
+			}catch(e){
+				console.log('!!! JavaScript error - RMenu fn show : '+e)
+			}
+		}
 		with(jQuery(v_menu)){
 			css({
 				'left':(x+1)+'px',
@@ -144,8 +155,6 @@ JB.Rmenu = function(params){
 			//základní typ
 			itm=make_item(v_menu,'JBMenuItem',p.ico);
 			itm.main.JBp={url:p.url,target:p.target};
-			itm.main.toto=this;
-			itm.main.JBMainDiv=v_menu;
 
 			jQuery(itm.main).click(function(event){
 				var p=this.JBp;
@@ -165,10 +174,12 @@ JB.Rmenu = function(params){
 				}else{
 					//jedná se funkci
 					try{
-						p.url(event);
+						p.url(event,this);
 					}catch(e){
-						alert('Chyba scriptu - user fn');
+						console.log('Err JB.Rmenu : JavaScript - user fn onclick');
+						alert('Error : ref console')
 					}
+					this.toto.hide();
 				}
 			})
 		}else if(p.typ=='split'){
@@ -180,7 +191,6 @@ JB.Rmenu = function(params){
 			x=JB.x.cel('div',{ob:itm.main,csN:'JBMenuItemSubPoint'});
 			x.style.backgroundImage="url('"+ico_arr['submenu_point']+"')";
 			itm.main.JBsubmenu=new JB.Rmenu(p.p);
-			itm.main.JBparentmenu=v_menu;
 			//nastav akce
 			jQuery(itm.main).mouseenter(function(event){
 				var pos=jQuery(this).offset();
@@ -199,6 +209,10 @@ JB.Rmenu = function(params){
 			itm.tx.innerHTML=tx;
 			
 		if(!JB.is.und(itm.main)){
+			itm.main.toto=this;
+			itm.main.JBMainDiv=v_menu;
+			if(!JB.is.und(p.ad))
+				JB.x.add_props(itm.main,p.ad);
 			itm.main.onmouseover=function(){
 				jQuery(this).addClass('JBMenuSelItm');
 			};
@@ -218,15 +232,31 @@ JB.Rmenu = function(params){
 		}
 	}
 	this.clear=function(){
-		var i=jQuery(v_menu).children('.JBMenuItemSub');
-		if(i.length>0)
-			for(var a=0;a<i.length;a++){
-				i[a].JBsubmenu.toto.clear();
-				jQuery(i[a].JBsubmenu).remove();
-			}
-		jQuery(v_menu).children('.JBMenuItem, .JBMenuItemSplit, .JBMenuItemSub').remove();
+		jQuery(v_menu).children('.JBMenuItemSub').each(function(){
+			this.JBsubmenu.toto.clear();//recursive
+			jQuery(this.JBsubmenu).remove();
+		})
+		jQuery(v_menu).children('.JBMenuItem, .JBMenuItemSplit, .JBMenuItemSub, .JBMenuTitle').remove();
 	}
-	
+	this.bind = function(el,menu,how){
+		var bindhow={
+			context:'contextmenu',
+			click:'click',
+			dbl:'dblclick'
+		};
+		if(JB.is.und(how)){
+			how='context';
+		}else{
+			how=String(how);
+		}
+		if(!/^((context)|(click)|(dbl))$/i.test(how))
+			how='context';
+		el.JBRMenu=v_menu;
+		jQuery(el).bind(bindhow[how],function(event){
+			this.JBRMenu.toto.showByEvent(event,this);
+			return false;
+		})
+	}
 	
 	//************ inicializuj
 	return create(this,params);
