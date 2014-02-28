@@ -1,7 +1,7 @@
 /*
 right click menu
 JB (c)2014
-v 1.1.0
+v 1.1.1
 */
 
 if(typeof JB == 'undefined')
@@ -224,11 +224,21 @@ JB.Rmenu = function(params){
 	}
 	
 	this.title=function(tx){
+		var el=jQuery(v_menu).children('.JBMenuTitle');
+		if(el.length==0){
+			if(v_menu.childNodes.length==0){
+				v_title=JB.x.cel('div',{csN:'JBMenuTitle',ob:v_menu});
+			}else{
+				v_title=JB.x.cel('div',{csN:'JBMenuTitle',app:false});
+				jQuery(v_menu.childNodes[0]).before(v_title);
+			}
+		}
+		el=jQuery(v_title);
 		if(JB.is.empty(tx)){
-			jQuery(v_title).hide();
+			el.hide();
 		}else{
-			jQuery(v_title).show();
-			v_title.innerHTML=tx;
+			el.show();
+			el.html(tx);
 		}
 	}
 	this.clear=function(){

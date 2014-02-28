@@ -1,3 +1,6 @@
+V 1.1.1
+	- FIX	: oprava recreate title po clear
+
 v 1.1.0
 	- ADD	: pøidán event onshow a funkce bind
 	- FIX	: fn clear, pøidána chybìjící class JBMenuTitle a opraveno na jQuery
