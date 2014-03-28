@@ -1,7 +1,7 @@
 /*
 right click menu
 JB (c)2014
-v 1.1.1
+v 1.1.2
 */
 
 if(typeof JB == 'undefined')
@@ -27,6 +27,8 @@ JB.Rmenu_default_icons=new function(){
 	def+='menu_ico/';
 	var o2={
 		copy:'copy.png',
+		bubble:'bubble.png',
+		clock:'clock.png',
 		cut:'cut.png',
 		paste:'paste.png',
 		del:'del.png',
@@ -109,27 +111,37 @@ JB.Rmenu = function(params){
 		return o;
 	}
 	
-	this.showByEvent=function(e,ref){
-		this.show(e.pageX,e.pageY,ref,e);
+	this.showByEvent=function(e,ref,d){
+		this.show(e.pageX,e.pageY,ref,e,d);
 	}
-	this.show=function(x,y,ref,e){
+	this.show=function(x,y,ref,e,d){
+		//d=delay before show
+		if(JB.is.und(d))
+			d=0;
+		if(!JB.is.integer(d))
+			d=0;
 		if(!JB.is.empty(onshow)){
 			try{
 				onshow(e,v_menu,ref);
 			}catch(e){
-				console.log('!!! JavaScript error - RMenu fn show : '+e)
+				JB.help.errToConsole('JavaScript error - RMenu fn show',e)
+				alert('JB.Rmenu show fn Error : see console for info');
 			}
 		}
 		with(jQuery(v_menu)){
+			clearQueue();
 			css({
 				'left':(x+1)+'px',
 				'top':y+'px'
 			});
-			show(200);
+			delay(d).show(200);
 		}
 	}
 	this.hide=function(){
-		jQuery(v_menu).delay(100).hide(200);
+		with(jQuery(v_menu)){
+			clearQueue();
+			delay(400).hide(200);
+		}
 	}
 	this.add = function(p){
 		var tx,url,target,x;
@@ -176,8 +188,8 @@ JB.Rmenu = function(params){
 					try{
 						p.url(event,this);
 					}catch(e){
-						console.log('Err JB.Rmenu : JavaScript - user fn onclick');
-						alert('Error : ref console')
+						JB.help.errToConsole('Err JB.Rmenu : JavaScript - user fn onclick',e);
+						alert('JB.Rmenu - User FN error : see console for info');
 					}
 					this.toto.hide();
 				}
@@ -195,7 +207,7 @@ JB.Rmenu = function(params){
 			jQuery(itm.main).mouseenter(function(event){
 				var pos=jQuery(this).offset();
 				pos.left+=jQuery(this).outerWidth()-5;
-				this.JBsubmenu.toto.show(pos.left,pos.top);
+				this.JBsubmenu.toto.show(pos.left,pos.top,null,null,400);
 			});
 			jQuery(itm.main).mouseleave(function(event){
 				this.JBsubmenu.toto.hide();
@@ -263,11 +275,11 @@ JB.Rmenu = function(params){
 			how='context';
 		el.JBRMenu=v_menu;
 		jQuery(el).bind(bindhow[how],function(event){
-			this.JBRMenu.toto.showByEvent(event,this);
+			this.JBRMenu.toto.showByEvent(event,this,0);
 			return false;
 		})
 	}
-	
+		
 	//************ inicializuj
 	return create(this,params);
 }

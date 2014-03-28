@@ -1,5 +1,11 @@
-V 1.1.1
-	- FIX	: oprava recreate title po clear
+v 1.1.3
+	- FIX	: disable delay on contex click
+
+v 1.1.2
+	- FIX	: delay on show/hide submenu
+	
+v 1.1.1
+	- FIX	: recreate title after clear
 
 v 1.1.0
 	- ADD	: pøidán event onshow a funkce bind
